@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrderFlow | The OS for Modern Commerce</title>
+    <meta name="description" content="Centralize your e-commerce operations. Sync orders, manage customers, and automate workflows in one unified CRM.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-balance { text-wrap: balance; }
+            .glass-panel {
+                @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+            }
+            .glass-nav {
+                @apply bg-white/80 backdrop-blur-md border-b border-gray-100;
+            }
+            .mesh-gradient {
+                background-color: #FAFAFA;
+                background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                                  radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                                  radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            }
+            .grid-bg {
+                background-size: 40px 40px;
+                background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+                                  linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] text-slate-900 antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white rotate-3 group-hover:rotate-6 transition-transform">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+                <span class="font-display font-bold text-xl tracking-tight">OrderFlow</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#features" class="hover:text-brand-600 transition-colors">Features</a>
+                <a href="#solutions" class="hover:text-brand-600 transition-colors">Solutions</a>
+                <a href="#customers" class="hover:text-brand-600 transition-colors">Customers</a>
+                <a href="#pricing" class="hover:text-brand-600 transition-colors">Pricing</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#" class="hidden md:block text-sm font-medium text-slate-600 hover:text-slate-900">Sign in</a>
+                <a href="#" class="px-5 py-2.5 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-all hover:shadow-lg hover:-translate-y-0.5 active:scale-95">
+                    Start Free Trial
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- Background Decor -->
+        <div class="absolute inset-0 -z-10 grid-bg [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
+        <div class="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-brand-500/10 rounded-full blur-[100px] animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 -z-10 w-[500px] h-[500px] bg-pink-500/10 rounded-full blur-[100px]"></div>
+
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                
+                <!-- Text Content -->
+                <div class="flex-1 max-w-2xl animate-fade-in-up">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-xs font-semibold uppercase tracking-wider mb-6">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                        </span>
+                        New v2.0 Released
+                    </div>
+                    
+                    <h1 class="font-display font-bold text-5xl lg:text-7xl leading-[1.1] mb-6 tracking-tight text-balance">
+                        Process Orders <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-pink-500">Without The Chaos.</span>
+                    </h1>
+                    <p class="text-xl text-slate-600 mb-8 leading-relaxed text-balance">
+                        The centralized CRM for modern merchants. Sync orders from Shopify, TikTok, and Amazon into one intelligent command center.
+                    </p>
+                    
+                    <div class="flex flex-wrap items-center gap-4">
+                        <a href="#" class="px-8 py-4 rounded-full bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-all hover:shadow-xl hover:-translate-y-1 flex items-center gap-2 group">
+                            Get Started Now
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#" class="px-8 py-4 rounded-full bg-white border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center gap-2">
+                            <i data-lucide="play-circle" class="w-4 h-4 text-slate-400"></i>
+                            Watch Demo
+                        </a>
+                    </div>
+
+                    <div class="mt-10 flex items-center gap-4 text-sm text-slate-500">
+                        <div class="flex -space-x-2">
+                            <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64" alt=""/>
+                            <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=64&h=64" alt=""/>
+                            <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=64&h=64" alt=""/>
+                        </div>
+                        <p>Trusted by 2,000+ merchants</p>
+                    </div>
+                </div>
+
+                <!-- Visual Mockup -->
+                <div class="flex-1 w-full relative">
+                    <!-- Abstract Dashboard Composition -->
+                    <div class="relative z-10 animate-float">
+                        <!-- Main Card -->
+                        <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 w-full max-w-lg mx-auto transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+                                        <i data-lucide="package" class="text-slate-600 w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-slate-900">Order #29384</div>
+                                        <div class="text-xs text-slate-500">Just now • from Shopify</div>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">Paid</span>
+                            </div>
+                            <!-- Steps -->
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-4 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </div>
+                                    <div class="text-sm">
+                                        <p class="font-medium text-slate-900">Payment Confirmed</p>
+                                        <p class="text-slate-500">$129.00 via Stripe</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                                        <i data-lucide="zap" class="w-4 h-4"></i>
+                                    </div>
+                                    <div class="text-sm">
+                                        <p class="font-medium text-slate-900">Auto-routed to Warehouse B</p>
+                                        <p class="text-slate-500">New York, NY</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 p-3 rounded-xl bg-white border border-slate-200 shadow-sm">
+                                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 animate-pulse">
+                                        <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+                                    </div>
+                                    <div class="text-sm">
+                                        <p class="font-medium text-slate-900">Generating Label...</p>
+                                        <p class="text-slate-500">DHL Express</p>
+                                    </div>
+                                    <button class="ml-auto text-xs bg-slate-900 text-white px-3 py-1.5 rounded-md hover:bg-slate-700">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Badge 1 -->
+                        <div class="absolute -top-12 -right-4 bg-white p-4 rounded-xl shadow-xl border border-slate-100 animate-float-delayed hidden md:block">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white">
+                                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-slate-500 uppercase tracking-wide font-bold">Revenue</div>
+                                    <div class="font-bold text-xl text-slate-900">+$4,290</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Badge 2 -->
+                        <div class="absolute -bottom-8 -left-8 bg-slate-900 p-4 rounded-xl shadow-2xl animate-float-delayed hidden md:block">
+                            <div class="flex items-center gap-3">
+                                <div class="flex -space-x-2">
+                                    <div class="w-8 h-8 rounded-full bg-slate-700 border-2 border-slate-900"></div>
+                                    <div class="w-8 h-8 rounded-full bg-slate-600 border-2 border-slate-900"></div>
+                                </div>
+                                <div class="text-white text-sm font-medium">New customer detected</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Logo Cloud -->
+            <div class="mt-24 pt-10 border-t border-slate-200">
+                <p class="text-center text-sm font-semibold text-slate-500 uppercase tracking-widest mb-8">Powering top retail brands</p>
+                <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                    <!-- Placeholder Logos using Text/Icons for cleaner code -->
+                    <div class="flex items-center gap-2 font-display font-bold text-xl"><i data-lucide="hexagon" class="fill-current"></i> ACME Corp</div>
+                    <div class="flex items-center gap-2 font-display font-bold text-xl"><i data-lucide="triangle" class="fill-current"></i> Vertex</div>
+                    <div class="flex items-center gap-2 font-display font-bold text-xl"><i data-lucide="circle" class="fill-current"></i> Sphere</div>
+                    <div class="flex items-center gap-2 font-display font-bold text-xl"><i data-lucide="square" class="fill-current"></i> BlockInc</div>
+                    <div class="flex items-center gap-2 font-display font-bold text-xl"><i data-lucide="star" class="fill-current"></i> Stellar</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition Section -->
+    <section id="features" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <h2 class="font-display font-bold text-3xl md:text-5xl mb-6">Built for the complexity of modern e-commerce.</h2>
+                <p class="text-xl text-slate-600">Stop wrestling with spreadsheets. OrderFlow connects your entire stack into one self-driving operating system.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-brand-100 hover:bg-brand-50/30 transition-all duration-300 hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-brand-600 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layers" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl mb-3">Unified Streams</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Connect Shopify, Amazon, and 50+ marketplaces. View, edit, and process every order from a single dashboard.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-brand-100 hover:bg-brand-50/30 transition-all duration-300 hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-pink-500 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="zap" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl mb-3">Smart Routing</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Automatically route orders to the nearest warehouse, cheapest carrier, or fastest delivery method based on your logic.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-brand-100 hover:bg-brand-50/30 transition-all duration-300 hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-blue-500 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="users" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl mb-3">Customer 360</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        See the full picture. Order history, LTV, and support tickets all in one sidebar next to their active order.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deep Dive / Dark Section -->
+    <section class="py-24 bg-[#0A0A0A] text-white relative overflow-hidden">
+        <!-- Decor -->
+        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0A0A0A] to-[#0A0A0A] opacity-50"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2">
+                    <h2 class="font-display font-bold text-3xl md:text-5xl mb-6">Stop switching tabs. <br>Start shipping faster.</h2>
+                    <ul class="space-y-6 mb-10">
+                        <li class="flex items-start gap-4">
+                            <div class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-1">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Real-time Inventory Sync</h4>
+                                <p class="text-slate-400">Prevent overselling. When an item sells on TikTok, stock updates on Shopify instantly.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-1">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Automated Returns</h4>
+                                <p class="text-slate-400">Give customers a self-service portal. Approve returns automatically based on rules.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 mt-1">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Profitability Analytics</h4>
+                                <p class="text-slate-400">Know exactly how much margin you make on every order after shipping and fees.</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="#" class="text-brand-400 font-semibold hover:text-brand-300 flex items-center gap-2">
+                        Explore all integrations <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <div class="lg:w-1/2 rounded-xl bg-slate-900 border border-slate-800 p-2 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+                    <!-- Browser Chrome -->
+                    <div class="bg-slate-800 rounded-t-lg p-3 flex items-center gap-2 mb-2">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div class="ml-4 bg-slate-900 rounded-md px-3 py-1 text-xs text-slate-500 flex-1 text-center font-mono">app.orderflow.com</div>
+                    </div>
+                    <!-- App UI Mockup (Dark Mode) -->
+                    <div class="bg-[#0f0f12] rounded-b-lg p-6 min-h-[400px]">
+                        <div class="flex gap-8 mb-8">
+                            <div class="w-1/4 space-y-4">
+                                <div class="h-8 bg-slate-800 rounded-md w-full"></div>
+                                <div class="h-4 bg-slate-800/50 rounded-md w-3/4"></div>
+                                <div class="h-4 bg-slate-800/50 rounded-md w-1/2"></div>
+                                <div class="h-4 bg-slate-800/50 rounded-md w-5/6"></div>
+                            </div>
+                            <div class="w-3/4 space-y-4">
+                                <div class="flex justify-between">
+                                    <div class="h-8 bg-slate-800 rounded-md w-1/3"></div>
+                                    <div class="h-8 bg-brand-600 rounded-md w-1/4"></div>
+                                </div>
+                                <div class="h-32 bg-slate-800/40 rounded-xl border border-slate-800"></div>
+                                <div class="h-32 bg-slate-800/40 rounded-xl border border-slate-800"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing (Simple) -->
+    <section id="pricing" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-display font-bold text-3xl md:text-5xl mb-4">Transparent Pricing</h2>
+                <p class="text-slate-600">Scale with us. No hidden transaction fees.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Plan 1 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <h3 class="font-bold text-lg mb-2">Starter</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-display font-bold">$29</span>
+                        <span class="text-slate-500">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Up to 500 orders/mo</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> 2 Integrations</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Basic Analytics</li>
+                    </ul>
+                    <a href="#" class="block text-center w-full py-3 rounded-xl border border-slate-200 font-semibold hover:border-slate-900 transition-colors">Start Free Trial</a>
+                </div>
+
+                <!-- Plan 2 (Featured) -->
+                <div class="bg-slate-900 p-8 rounded-2xl shadow-xl relative transform md:-translate-y-4 text-white">
+                    <div class="absolute top-0 right-0 bg-brand-500 text-white text-xs font-bold px-3 py-1 rounded-bl-xl">POPULAR</div>
+                    <h3 class="font-bold text-lg mb-2 text-white">Growth</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-display font-bold text-white">$79</span>
+                        <span class="text-slate-400">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-400"></i> Up to 2,500 orders/mo</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-400"></i> 5 Integrations</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-400"></i> Advanced Automation</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-400"></i> Priority Support</li>
+                    </ul>
+                    <a href="#" class="block text-center w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-500 font-semibold transition-colors">Start Free Trial</a>
+                </div>
+
+                <!-- Plan 3 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg mb-2">Scale</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-display font-bold">$199</span>
+                        <span class="text-slate-500">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Unlimited orders</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Unlimited Integrations</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> API Access</li>
+                    </ul>
+                    <a href="#" class="block text-center w-full py-3 rounded-xl border border-slate-200 font-semibold hover:border-slate-900 transition-colors">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-32 relative overflow-hidden">
+        <div class="absolute inset-0 bg-brand-600">
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 32px 32px;"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-6 relative z-10 text-center text-white">
+            <h2 class="font-display font-bold text-4xl md:text-6xl mb-6">Ready to regain control?</h2>
+            <p class="text-xl text-brand-100 mb-10 max-w-2xl mx-auto">Join the 2,000+ merchants who trust OrderFlow to manage their operations. Set up takes less than 5 minutes.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-brand-600 font-bold hover:shadow-2xl hover:scale-105 transition-all">Start Your 14-Day Free Trial</a>
+                <a href="#" class="w-full sm:w-auto px-8 py-4 rounded-full border border-brand-400 text-white font-semibold hover:bg-brand-700 transition-all">Schedule Demo</a>
+            </div>
+            <p class="mt-8 text-sm text-brand-200">No credit card required • Cancel anytime</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white pt-20 pb-10 border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 lg:grid-cols-6 gap-10 mb-20">
+                <div class="col-span-2">
+                    <a href="#" class="flex items-center gap-2 mb-6 text-slate-900">
+                        <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white">
+                            <i data-lucide="layers" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl">OrderFlow</span>
+                    </a>
+                    <p class="text-slate-500 mb-6 max-w-sm">The operating system for modern e-commerce. Sync, automate, and scale without the headaches.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center hover:bg-slate-100 hover:text-brand-600 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center hover:bg-slate-100 hover:text-brand-600 transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center hover:bg-slate-100 hover:text-brand-600 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-6">Product</h4>
+                    <ul class="space-y-4 text-sm text-slate-600">
+                        <li><a href="#" class="hover:text-brand-600">Features</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Integrations</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Pricing</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Changelog</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Roadmap</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-6">Resources</h4>
+                    <ul class="space-y-4 text-sm text-slate-600">
+                        <li><a href="#" class="hover:text-brand-600">Documentation</a></li>
+                        <li><a href="#" class="hover:text-brand-600">API Reference</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Community</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Help Center</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-6">Company</h4>
+                    <ul class="space-y-4 text-sm text-slate-600">
+                        <li><a href="#" class="hover:text-brand-600">About</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Blog</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-600">Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-sm text-slate-500">© 2024 OrderFlow Inc. All rights reserved.</p>
+                <div class="flex gap-8 text-sm text-slate-500">
+                    <a href="#" class="hover:text-slate-900">Privacy Policy</a>
+                    <a href="#" class="hover:text-slate-900">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
